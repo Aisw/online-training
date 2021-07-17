@@ -1,13 +1,15 @@
 <template>
-    <swiper>
-      <swiper-item v-for="(item, id) in banners" :key="id">
-          <img :src="'http://127.0.0.1:8888/rec/'+item" alt="" @close="imageLoad">
-      </swiper-item>
-    </swiper>
+  <div class="home-swiper">
+    <van-swipe :autoplay="3000">
+      <van-swipe-item v-for="(image, index) in banners" :key="index">
+        <img v-lazy="'http://119.29.199.37:8888/swiper/'+image" />
+      </van-swipe-item>
+    </van-swipe>
+  </div>
+
 </template>
 
 <script>
-import {Swiper, SwiperItem} from "@/components/common/swiper/index"
 
 export default {
 name: "HomeSwiper",
@@ -24,23 +26,17 @@ name: "HomeSwiper",
       }
     }
   },
-  components:{
-    Swiper,
-    SwiperItem
-  },
+
   created() {
   },
   methods:{
-    imageLoad(){
-      if (!this.isLoad){
-        this.$emit('swiperImageLoad')
-        this.isLoad = true
-      }
-    },
   }
 }
 </script>
 
 <style scoped>
-
+.home-swiper{
+  /*margin-top: 44px;*/
+  overflow-y:auto;
+}
 </style>

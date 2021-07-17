@@ -7,50 +7,47 @@
       <div slot="center">在线培训</div>
     </nav-bar>
 
-    <scroll class="content"
-            ref="scroll"
-            :probe-type="3"
-            :pull-up-load='true'>
-          <home-swiper :banners="banners"></home-swiper>
-<!--<img src="http://127.0.0.1:8888/rec/2.png" alt="" />-->
+    <div class="content">
+      <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view></home-recommend-view>
-<!--          <task-group v-for="(taskGroup,id) in taskGroups"-->
-<!--                  :task-group = "taskGroup"-->
-<!--                  :key="id"></task-group>-->
+      <group-item :groups="groups"></group-item>
+    </div>
 
-    </scroll>
+
   </div>
 </template>
 
 <script>
 import NavBar from "@/components/common/navBar/NavBar";
-import Scroll from "@/components/common/scroll/Scroll";
 import HomeSwiper from "./HomeSwiper";
 import HomeRecommendView from "./HomeRecommendView";
+import GroupItem from "./GroupItem";
 
-import {getBanners} from "../../network/home";
+import {getBanners,getScroller} from "@/network/home";
+
 export default {
   name: "Home",
   components: {
-    // TaskGroup,
+    GroupItem,
     NavBar,
-    Scroll,
     HomeSwiper,
     HomeRecommendView,
   },
   data() {
     return {
       banners: [],
-      taskGroups:[],
+      groups:{
+        list: Array,
+      } ,
     }
   },
   created() {
     //1.加载图片
     this.getBanners()
-
+    //2.加载培训及其资料图片
+    this.getScroller()
     //3.监听item中图片加载完成
     this.$bu.$on('itemImageLoad',() => {
-      console.log('imgLoad')
       this.$refs.scroll && this.$refs.scroll.refresh()
     })
   },
@@ -59,18 +56,26 @@ export default {
     getBanners(){
       getBanners().then(res => {
         this.banners = res.data
-        console.log(this.banners),'banners';
       })
     },
+
+    //获取推荐培训
+    getScroller(){
+      getScroller().then(res => {
+        this.groups.list = res.data
+        console.log(this.groups)
+      })
+    }
 
   }
 }
 </script>
 
 <style scoped>
+
 #home{
   height: 100vh;
-  position: relative;
+  position: absolute;
   top: 0;
   bottom:0;
   left:0;
@@ -84,20 +89,15 @@ export default {
   right: 0;
 }
 
-.content{
-  overflow: hidden;
-  position: absolute;
-  top: 44px;
-  bottom: 49px;
-  left: 0;
-  right: 0;
-}
-
 .back img{
   width: 30px;
   height: 30px;
 
   margin-top: 7px;
   margin-left: 20px;
+}
+
+.content{
+  margin-bottom: 44px;
 }
 </style>

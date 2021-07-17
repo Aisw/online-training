@@ -25,13 +25,25 @@ export default {
   },
   methods:{
     studyClick(){
-      if (this.$store.getters.getLogin == false)
+      if (this.$store.getters.getLogin == false){
         Toast('未登录')
+        console.log('false')
+      }else{
+        console.log('true')
+        this.$router.push('/study')
+      }
+
       // console.log(this.$store.getters.getLogin,'login')
     },
     pointsClick(){
-      if (this.$store.getters.getLogin == false)
-        Toast('未登录')
+      // if (this.$store.getters.getLogin == false){
+      //   Toast('未登录')
+      //   console.log('false')
+      // }else{
+        console.log('true')
+        this.$router.push('/point')
+      // }
+
     }
   }
 }
